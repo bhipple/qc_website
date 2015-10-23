@@ -1,40 +1,43 @@
-; Reads a file and returns the lines as a list
-
-(hunchentoot:define-easy-handler (say-yo :uri "/yo") (name)
-  (setf (hunchentoot:content-type*) "text/plain")
-  (format nil "Hey~@[ ~A~]!" name))
-
-(hunchentoot:define-easy-handler (tickets :uri "/t") ()
-  (setf (hunchentoot:content-type*) "text/plain")
-  (handle-tickets))
-
-(defun get-file (file)
+;; ============================================================================
+;;                               File Handling
+;; ============================================================================
+(defun get-file-lines (file)
   (with-open-file (stream file)
     (loop for line = (read-line stream nil)
           while line
           collect line)))
 
 (defun get-fname-content-pair (fname)
-  (cons (file-namestring fname) (get-file fname)))
+  (cons (file-namestring fname) (get-file-lines fname)))
 
 (defun get-csv-files (path)
   (directory (concatenate 'string path "*.csv")))
 
-(defun print-lines (lines)
-  (format nil "~{~a~&~}" lines))
+;; ============================================================================
+;;                                Formatting
+;; ============================================================================
+(defun format-lines (lines)
+  (format nil "~{~a<br>~}" lines))
+
+(defun description (fname)
+  (let ((name-content-pair (get-fname-content-pair fname)))
+    (format nil "<h3>~a:</h3><p>~a</p>"
+            (car name-content-pair)
+            (format-lines (cdr name-content-pair)))))
 
 (defun handle-tickets ()
   (let* ((filenames (get-csv-files "./"))
-         (name-content-pairs (mapcar
-                               #'get-fname-content-pair
-                               filenames)))
-    (loop for f in name-content-pairs
-          collect (format nil "~a:~%~a~&~%" (car f) (print-lines (cdr f))))))
+         (descriptions (mapcar #'description filenames)))
+    (format nil "~{~a~}" descriptions)))
 
 ;; ============================================================================
 ;;                           Hunchentoot Handlers
 ;; ============================================================================
 (ql:quickload "hunchentoot")
 
-;(defparameter acceptor (make-instance 'hunchentoot:easy-acceptor :port 4242))
-;(hunchentoot:start acceptor)
+(hunchentoot:define-easy-handler (tickets :uri "/t") ()
+  (setf (hunchentoot:content-type*) "html")
+  (handle-tickets))
+
+(defparameter acceptor (make-instance 'hunchentoot:easy-acceptor :port 4242))
+(hunchentoot:start acceptor)
