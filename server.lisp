@@ -27,12 +27,19 @@
             (format-lines (cdr name-content-pair)))))
 
 (defun get-header ()
-  (format nil "<h1>Scraping Commits in QC</h1><h2>(On SCIQ but not SCIP)</h2>"))
+  (format nil "<p>~a<h1><u>Scraping Commits in QC</u></h1><h2>(On SCIQ but not SCIP)</h2></p><hr>" (display-images)))
+
+(defun wrap-img (img)
+  (let ((path "img/"))
+    (concatenate 'string "<img src=\"" path img "\"></img>")))
+
+(defun display-images ()
+  (concatenate 'string (wrap-img "lisplogo_fancy_256.png") (wrap-img "lisplogo_warning_256.png")))
 
 (defun handle-tickets ()
   (let* ((filenames (get-txt-files "./"))
          (descriptions (mapcar #'description filenames)))
-    (format nil "~a~{~a~}" (get-header) descriptions)))
+    (format nil "<html><body>~a~{~a~}<hr>~a</body></html>" (get-header) descriptions (display-images))))
 
 ;; ============================================================================
 ;;                           Hunchentoot Handlers
