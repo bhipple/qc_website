@@ -1,3 +1,5 @@
+(load "shell.lisp")
+
 ;; ============================================================================
 ;;                               File Handling
 ;; ============================================================================
@@ -13,6 +15,18 @@
 
 (defun get-txt-files (path)
   (directory (concatenate 'string path "*.txt")))
+
+(defun extract-archive (path archiveName)
+  (let ((fullName (concatenate 'string path archiveName)))
+    (princ "Extracting: ")
+    (princ archiveName)
+    (sh (concatenate 'string "tar -xf " fullName))
+    (print "Moving to archives.")
+    (sh (concatenate 'string "mv " fullName " /home/ubuntu/scrp_qc_website/archives/" archiveName))))
+
+(defun check-for-new-archive (path)
+  (let ((archive (directory (concatenate 'string path "archive*.tar.gz"))))
+    (if archive (extract-archive path (file-namestring (car archive))))))
 
 ;; ============================================================================
 ;;                                Formatting
