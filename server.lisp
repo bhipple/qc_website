@@ -51,9 +51,10 @@
   (concatenate 'string (wrap-img "lisplogo_fancy_256.png") (wrap-img "lisplogo_warning_256.png")))
 
 (defun handle-tickets ()
+  (check-for-new-archive "/home/ubuntu/")
   (let* ((filenames (get-txt-files "./"))
          (descriptions (mapcar #'description filenames)))
-    (format nil "<html><body>~a~{~a~}<hr>~a</body></html>" (get-header) descriptions (display-images))))
+    (format nil "<html><body>~a~{~a~}~a</body></html>" (get-header) descriptions (wrap-img "lisplogo_flag2_256.png"))))
 
 ;; ============================================================================
 ;;                           Hunchentoot Handlers
