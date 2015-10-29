@@ -18,6 +18,7 @@
 
 (defun extract-archive (path archiveName)
   (let ((fullName (concatenate 'string path archiveName)))
+    (sh "rm -f *.txt")
     (princ "Extracting: ")
     (princ archiveName)
     (sh (concatenate 'string "tar -xf " fullName))
@@ -35,7 +36,7 @@
   (let* ((barpos (position #\| line))
          (author (subseq line 0 barpos))
          (msg (subseq line (+ barpos 1))))
-    (concatenate 'string "<font color=\"RoyalBlue\">" author "</font>: " msg)))
+    (concatenate 'string "<font color=\"DarkRed\">" author "</font>: " msg)))
 
 (defun format-lines (lines)
   (let* ((formatted (mapcar #'format-line lines)))
