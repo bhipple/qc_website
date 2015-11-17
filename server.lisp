@@ -45,8 +45,9 @@
          (date (caddr parts))
          (msg (cadddr parts)))
     (concatenate 'string date
-                        "<font color=\"DarkRed\"> "
-                        author "</font>: "
+                        " "
+                        (tag font (color "DarkRed") (princ author))
+                        ": "
                         "<a href=\""
                         bbgithub
                         task
