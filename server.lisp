@@ -33,7 +33,7 @@
 ;;                                Formatting
 ;; ============================================================================
 (defparameter gitweb "https://code.dev.bloomberg.com/gitweb?p=scrp/")
-(defparameter bbgithub "https://bbgithub.dev.bloomberg.com/scrp-jenkins-test/")
+(defparameter bbgithub "https://bbgithub.dev.bloomberg.com/scrp/")
 
 (defun format-line (line task)
   (let* ((parts (split-sequence:split-sequence #\| line))
