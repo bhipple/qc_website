@@ -1,5 +1,8 @@
+; For some reason, none of these things load automatically in the REPL
 (load "shell.lisp")
 (load "html.lisp")
+(ql:quickload "split-sequence")
+(ql:quickload "hunchentoot")
 
 ;; ============================================================================
 ;;                               File Handling
@@ -33,7 +36,6 @@
 ;; ============================================================================
 ;;                                Formatting
 ;; ============================================================================
-(defparameter gitweb "https://code.dev.bloomberg.com/gitweb?p=scrp/")
 (defparameter bbgithub "https://bbgithub.dev.bloomberg.com/scrp/")
 
 (defun format-line (line task)
@@ -77,9 +79,9 @@
   (format nil "<p>~a<h1><u>Scraping Commits in QC</u></h1><h2>(On SCIQ but not SCIP)</h2></p><hr>" (display-images)))
 
 (defun wrap-img (img)
-  (let ((path "img/")
-        (image (concatenate 'string path img))
-    (concatenate 'string "<img src=\"" image "\"></img>")))
+  (let* ((path "img/")
+        (imageLink (concatenate 'string path img)))
+    (concatenate 'string "<img src=\"" imageLink "\"></img>")))
 
 (defun display-images ()
   (concatenate 'string (wrap-img "lisplogo_fancy_256.png") (wrap-img "lisplogo_warning_256.png")))
@@ -93,12 +95,9 @@
 ;; ============================================================================
 ;;                           Hunchentoot Handlers
 ;; ============================================================================
-(ql:quickload "split-sequence")
-(ql:quickload "hunchentoot")
-
 (hunchentoot:define-easy-handler (tickets :uri "/t") ()
   (setf (hunchentoot:content-type*) "html")
   (handle-tickets))
 
-(defparameter acceptor (make-instance 'hunchentoot:easy-acceptor :port 4242))
-(hunchentoot:start acceptor)
+;(defparameter acceptor (make-instance 'hunchentoot:easy-acceptor :port 4242))
+;(hunchentoot:start acceptor)
