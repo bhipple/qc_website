@@ -33,17 +33,28 @@
 ;;                                Formatting
 ;; ============================================================================
 (defparameter gitweb "https://code.dev.bloomberg.com/gitweb?p=scrp/")
+(defparameter bbgithub "https://bbgithub.dev.bloomberg.com/scrp-jenkins-test/")
 
-(defun format-line (line)
+(defun format-line (line task)
   (let* ((parts (split-sequence:split-sequence #\| line))
          (author (car parts))
          (sha (cadr parts))
          (date (caddr parts))
          (msg (cadddr parts)))
-    (concatenate 'string date "<font color=\"DarkRed\"> " author "</font>: " msg)))
+    (concatenate 'string date
+                        "<font color=\"DarkRed\"> "
+                        author "</font>: "
+                        "<a href=\""
+                        bbgithub
+                        task
+                        "/commit/"
+                        sha
+                        "\">"
+                        msg
+                        "</a>")))
 
 (defun format-lines (lines task)
-  (let* ((formatted (mapcar #'format-line lines)))
+  (let* ((formatted (mapcar (lambda (line) (format-line line task)) lines)))
     (format nil "~{~a<br>~}" formatted)))
 
 (defun description (fname)
@@ -53,9 +64,9 @@
     (format nil "<h3>~a:</h3><p>~a</p>"
             (concatenate 'string
                          "<a href=\""
-                         gitweb
+                         bbgithub
                          task
-                         ".git;a=log;h=HEAD\">"
+                         "\">"
                          task
                          "</a>")
             (format-lines content task))))
