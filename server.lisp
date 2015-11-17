@@ -32,28 +32,33 @@
 ;; ============================================================================
 ;;                                Formatting
 ;; ============================================================================
-(defun format-line (line)
-  (let* ((barpos (position #\| line))
-         (author (subseq line 0 barpos))
-         (msg (subseq line (+ barpos 1))))
-    (concatenate 'string "<font color=\"DarkRed\">" author "</font>: " msg)))
+(defparameter gitweb "https://code.dev.bloomberg.com/gitweb?p=scrp/")
 
-(defun format-lines (lines)
+(defun format-line (line)
+  (let* ((parts (split-sequence:split-sequence #\| line))
+         (author (car parts))
+         (sha (cadr parts))
+         (date (caddr parts))
+         (msg (cadddr parts)))
+    (concatenate 'string date "<font color=\"DarkRed\"> " author "</font>: " msg)))
+
+(defun format-lines (lines task)
   (let* ((formatted (mapcar #'format-line lines)))
     (format nil "~{~a<br>~}" formatted)))
 
 (defun description (fname)
   (let* ((name-content-pair (get-fname-content-pair fname))
-         (name (car name-content-pair))
+         (task (car name-content-pair))
          (content (cdr name-content-pair)))
     (format nil "<h3>~a:</h3><p>~a</p>"
             (concatenate 'string
-                         "<a href=\"https://code.dev.bloomberg.com/gitweb?p=scrp/"
-                         name
+                         "<a href=\""
+                         gitweb
+                         task
                          ".git;a=log;h=HEAD\">"
-                         name
+                         task
                          "</a>")
-            (format-lines content))))
+            (format-lines content task))))
 
 (defun get-header ()
   (format nil "<p>~a<h1><u>Scraping Commits in QC</u></h1><h2>(On SCIQ but not SCIP)</h2></p><hr>" (display-images)))
@@ -74,6 +79,7 @@
 ;; ============================================================================
 ;;                           Hunchentoot Handlers
 ;; ============================================================================
+(ql:quickload "split-sequence")
 (ql:quickload "hunchentoot")
 
 (hunchentoot:define-easy-handler (tickets :uri "/t") ()
