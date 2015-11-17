@@ -17,14 +17,13 @@
                  ,no))))
 
 (defmacro tag (name atts &body body)
-  `(concatenate 'string
-               (print-tag ',name
-                          (list ,@(mapcar (lambda (x)
-                                            `(cons ',(car x) ,(cdr x)))
-                                          (pairs atts)))
-                          nil)
-               ,@body
-               (print-tag ',name nil t)))
+  `(progn (print-tag ',name
+                     (list ,@(mapcar (lambda (x)
+                                       `(cons ',(car x) ,(cdr x)))
+                                     (pairs atts)))
+                     nil)
+          ,@body
+          (print-tag ',name nil t)))
 
 (defmacro html (&body body)
   `(tag html ()
@@ -47,12 +46,11 @@
     (f lst nil)))
 
 (defun print-tag (name alst closingp)
-  (concatenate 'string
-               "<"
-               (when closingp
-                 "/")
-               (string-downcase name)
-               (mapc (lambda (att)
-                       (format nil " ~a=\"~a\"" (string-downcase (car att)) (cdr att)))
-                     alst)
-               ">"))
+  (princ #\<)
+  (when closingp
+    (princ #\/))
+  (princ (string-downcase name))
+  (mapc (lambda (att)
+          (format t " ~a=\"~a\"" (string-downcase (car att)) (cdr att)))
+        alst)
+  (princ #\>))
