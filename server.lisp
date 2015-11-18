@@ -38,43 +38,46 @@
 ;; ============================================================================
 (defparameter bbgithub "https://bbgithub.dev.bloomberg.com/scrp/")
 
+; Each line is a commit in QC for the task
 (defun format-line (line task)
   (let* ((parts (split-sequence:split-sequence #\| line))
          (author (car parts))
          (sha (cadr parts))
          (date (caddr parts))
          (msg (cadddr parts))
-         (bbgh-link (concatenate 'string bbgithub task "/commit/" sha)))
-    (concatenate 'string date
-                 " "
-                 (tag font (color "DarkRed") (concatenate 'string author))
-                 ": "
-                 (tag a (href bbgh-link) (concatenate 'string msg)))))
+         (commit-link (concatenate 'string bbgithub task "/commit/" sha)))
+    (concatenate 'string
+                 (tag td () date)
+                 (tag td () author)
+                 (tag td () (tag a (href commit-link) msg)))))
 
+; Formats all lines for a task into a table
 (defun format-lines (lines task)
-  (let* ((formatted (mapcar (lambda (line) (format-line line task)) lines)))
-    (format nil "~{~a</br>~}" formatted)))
+  (apply #'concatenate 'string (mapcar (lambda (line) (tag tr ()  (format-line line task))) lines)))
 
-(defun description (fname)
+; Generates the table data for one task
+(defun task-status (fname)
   (let* ((name-content-pair (get-fname-content-pair fname))
          (task (car name-content-pair))
          (content (cdr name-content-pair))
-         (bbgh-link (concatenate 'string bbgithub task))
+         (bbgh-task-link (concatenate 'string bbgithub task))
          (formatted-lines (format-lines content task)))
     (concatenate 'string
-                 (tag h3 ()
-                   (concatenate 'string
-                     (tag a (href bbgh-link) task)
-                     ":"))
-                 (tag p () formatted-lines))))
+                 (tag h3 () (tag a (href bbgh-task-link) task ":<br>"))
+                 (tag table (border "1" cellpadding "3" cellspacing "1")
+                   (tag tr ()
+                     (tag th () "Date")
+                     (tag th () "Author")
+                     (tag th () "Commit"))
+                     formatted-lines))))
 
 (defun get-header ()
-  (tag p () (concatenate 'string
-              (display-images)
-              (tag h1 ()
-                    (tag u () "Scraping Commits in QC"))
-              (tag h2 () "(On SCIQ but not SCIP)")
-              (tag hr ()))))
+  (tag p ()
+    (display-images)
+    (tag h1 ()
+      (tag u () "Scraping Commits in QC"))
+    (tag h2 () "(On SCIQ but not SCIP)")
+    (tag hr ())))
 
 (defun display-images ()
   (concatenate 'string
@@ -84,12 +87,12 @@
 (defun handle-tickets ()
   (check-for-new-archive "/home/ubuntu/")
   (let* ((filenames (get-txt-files "./"))
-         (descriptions (mapcar #'description filenames)))
+         (descriptions (mapcar #'task-status filenames)))
     (html (tag body ()
-                (concatenate 'string
-                  (get-header)
-                  (format nil "~{~a~}" descriptions)
-                  (tag img (src "img/lisplogo_flag2_256.png")))))))
+            (get-header)
+
+            (format nil "~{~a~}" descriptions)
+            (tag img (src "img/lisplogo_flag2_256.png"))))))
 
 ;; ============================================================================
 ;;                           Hunchentoot Handlers
