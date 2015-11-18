@@ -43,19 +43,13 @@
          (author (car parts))
          (sha (cadr parts))
          (date (caddr parts))
-         (msg (cadddr parts)))
+         (msg (cadddr parts))
+         (bbgh-link (concatenate 'string bbgithub task "/commit/" sha)))
     (concatenate 'string date
-                        " "
-                        (tag font (color "DarkRed") (princ author))
-                        ": "
-                        "<a href=\""
-                        bbgithub
-                        task
-                        "/commit/"
-                        sha
-                        "\">"
-                        msg
-                        "</a>")))
+                 " "
+                 (tag font (color "DarkRed") (princ author))
+                 ": "
+                 (tag a (href bbgh-link) (princ msg)))))
 
 (defun format-lines (lines task)
   (let* ((formatted (mapcar (lambda (line) (format-line line task)) lines)))
@@ -65,33 +59,36 @@
   (let* ((name-content-pair (get-fname-content-pair fname))
          (task (car name-content-pair))
          (content (cdr name-content-pair))
+         (bbgh-link (concatenate 'string bbgithub task))
          (formatted-lines (format-lines content task)))
-    (format nil "<h3>~a:</h3><p>~a</p>"
-            (concatenate 'string
-                         "<a href=\""
-                         bbgithub
-                         task
-                         "\">"
-                         task
-                         "</a>")
-            formatted-lines)))
+    (concatenate 'string
+                 (tag h3 ()
+                   (progn
+                     (tag a (href bbgh-link))
+                     (princ task)
+                     (princ ":")))
+                 (tag p () (princ formatted-lines)))))
 
 (defun get-header ()
-  (format nil "<p>~a<h1><u>Scraping Commits in QC</u></h1><h2>(On SCIQ but not SCIP)</h2></p><hr>" (display-images)))
-
-(defun wrap-img (img)
-  (let* ((path "img/")
-        (imageLink (concatenate 'string path img)))
-    (concatenate 'string "<img src=\"" imageLink "\"></img>")))
+  (tag p () (progn
+              (princ (display-images))
+              (tagp h1 ()
+                    (tagp u ()
+                          (princ "Scraping Commits in QC")))
+              (tagp h2 () (princ "(On SCIQ but not SCIP)"))
+              (tagp hr ()))))
 
 (defun display-images ()
-  (concatenate 'string (wrap-img "lisplogo_fancy_256.png") (wrap-img "lisplogo_warning_256.png")))
+  (concatenate 'string
+               (tag img (src "img/lisplogo_fancy_256.png"))
+               (tag img (src "img/lisplogo_warning_256.png"))))
 
 (defun handle-tickets ()
   (check-for-new-archive "/home/ubuntu/")
   (let* ((filenames (get-txt-files "./"))
          (descriptions (mapcar #'description filenames)))
-    (format nil "<html><body>~a~{~a~}~a</body></html>" (get-header) descriptions (wrap-img "lisplogo_flag2_256.png"))))
+    (html (tagp body ()
+                (format t "~a~{~a~}~a" (get-header) descriptions (tag img (src "img/lisplogo_flag2_256.png")))))))
 
 ;; ============================================================================
 ;;                           Hunchentoot Handlers

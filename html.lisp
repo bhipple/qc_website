@@ -16,7 +16,7 @@
            ,yes)
          ,no))))
 
-; Redirects stdout to a stringstream, surrounded by the tag
+; Generates an html tag and returns it as a string
 (defmacro tag (name atts &body body)
   `(with-output-to-string (*standard-output*)
      (progn
@@ -27,6 +27,12 @@
                   nil)
        ,@body
        (print-tag ',name nil t))))
+
+; Same as the above, except it will print the tag to stdout
+; This is necessary to nest tags recursively. I should find a more elegant
+; way to handle this interaction.
+(defmacro tagp (&body body)
+  `(princ (tag ,@body)))
 
 (defmacro html (&body body)
   `(tag html ()
