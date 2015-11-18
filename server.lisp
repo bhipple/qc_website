@@ -72,11 +72,11 @@
 (defun get-header ()
   (tag p () (progn
               (princ (display-images))
-              (tagp h1 ()
-                    (tagp u ()
+              (tag h1 ()
+                    (tag u ()
                           (princ "Scraping Commits in QC")))
-              (tagp h2 () (princ "(On SCIQ but not SCIP)"))
-              (tagp hr ()))))
+              (tag h2 () (princ "(On SCIQ but not SCIP)"))
+              (tag hr ()))))
 
 (defun display-images ()
   (concatenate 'string
@@ -88,7 +88,9 @@
   (let* ((filenames (get-txt-files "./"))
          (descriptions (mapcar #'description filenames)))
     (html (tagp body ()
-                (format t "~a~{~a~}~a" (get-header) descriptions (tag img (src "img/lisplogo_flag2_256.png")))))))
+                (progn
+                  (princ (get-header))
+                  (format t "~{~a~}~a"  descriptions (tag img (src "img/lisplogo_flag2_256.png"))))))))
 
 ;; ============================================================================
 ;;                           Hunchentoot Handlers

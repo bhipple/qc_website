@@ -25,7 +25,7 @@
                                     `(cons ',(car x) ,(cdr x)))
                                   (pairs atts)))
                   nil)
-       ,@body
+       (concatenate 'string "" ,@body)
        (print-tag ',name nil t))))
 
 ; Same as the above, except it will print the tag to stdout
