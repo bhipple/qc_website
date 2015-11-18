@@ -4,6 +4,8 @@
 (ql:quickload "split-sequence")
 (ql:quickload "hunchentoot")
 
+(defparameter github "https://bbgithub.dev.bloomberg.com/scrp/")
+
 ;; ============================================================================
 ;;                               File Handling
 ;; ============================================================================
@@ -27,7 +29,7 @@
     (princ archiveName)
     (sh (concatenate 'string "tar -xf " fullName))
     (print "Moving to archives.")
-    (sh (concatenate 'string "mv " fullName " /home/ubuntu/scrp_qc_website/archives/" archiveName))))
+    (sh (concatenate 'string "mv " fullName " /home/ubuntu/qc_archives/" archiveName))))
 
 (defun check-for-new-archive (path)
   (let ((archive (directory (concatenate 'string path "archive*.tar.gz"))))
@@ -36,8 +38,6 @@
 ;; ============================================================================
 ;;                                Formatting
 ;; ============================================================================
-(defparameter bbgithub "https://bbgithub.dev.bloomberg.com/scrp/")
-
 ; Each line is a commit in QC for the task
 (defun format-line (line task)
   (let* ((parts (split-sequence:split-sequence #\| line))
@@ -45,7 +45,7 @@
          (sha (cadr parts))
          (date (caddr parts))
          (msg (cadddr parts))
-         (commit-link (concatenate 'string bbgithub task "/commit/" sha)))
+         (commit-link (concatenate 'string github task "/commit/" sha)))
     (concatenate 'string
                  (tag td () date)
                  (tag td () author)
@@ -60,7 +60,7 @@
   (let* ((name-content-pair (get-fname-content-pair fname))
          (task (car name-content-pair))
          (content (cdr name-content-pair))
-         (bbgh-task-link (concatenate 'string bbgithub task))
+         (bbgh-task-link (concatenate 'string github task))
          (formatted-lines (format-lines content task)))
     (concatenate 'string
                  (tag h3 () (tag a (href bbgh-task-link) task ":<br>"))
@@ -75,8 +75,8 @@
   (tag p ()
     (display-images)
     (tag h1 ()
-      (tag u () "Scraping Commits in QC"))
-    (tag h2 () "(On SCIQ but not SCIP)")
+      (tag u () "Commits in QC"))
+    (tag h2 () "(On Beta but not Production)")
     (tag hr ())))
 
 (defun display-images ()
