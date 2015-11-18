@@ -5,6 +5,7 @@
 (ql:quickload "hunchentoot")
 
 (defparameter github "https://bbgithub.dev.bloomberg.com/scrp/")
+(defparameter archive-location "/home/ubuntu/qc_archives/")
 
 ;; ============================================================================
 ;;                               File Handling
@@ -29,7 +30,7 @@
     (princ archiveName)
     (sh (concatenate 'string "tar -xf " fullName))
     (print "Moving to archives.")
-    (sh (concatenate 'string "mv " fullName " /home/ubuntu/qc_archives/" archiveName))))
+    (sh (concatenate 'string "mv " fullName " " archive-location archiveName))))
 
 (defun check-for-new-archive (path)
   (let ((archive (directory (concatenate 'string path "archive*.tar.gz"))))
