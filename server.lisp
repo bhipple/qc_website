@@ -47,9 +47,9 @@
          (bbgh-link (concatenate 'string bbgithub task "/commit/" sha)))
     (concatenate 'string date
                  " "
-                 (tag font (color "DarkRed") (princ author))
+                 (tag font (color "DarkRed") (concatenate 'string author))
                  ": "
-                 (tag a (href bbgh-link) (princ msg)))))
+                 (tag a (href bbgh-link) (concatenate 'string msg)))))
 
 (defun format-lines (lines task)
   (let* ((formatted (mapcar (lambda (line) (format-line line task)) lines)))
@@ -63,19 +63,17 @@
          (formatted-lines (format-lines content task)))
     (concatenate 'string
                  (tag h3 ()
-                   (progn
-                     (tag a (href bbgh-link))
-                     (princ task)
-                     (princ ":")))
-                 (tag p () (princ formatted-lines)))))
+                   (concatenate 'string
+                     (tag a (href bbgh-link) task)
+                     ":"))
+                 (tag p () formatted-lines))))
 
 (defun get-header ()
-  (tag p () (progn
-              (princ (display-images))
+  (tag p () (concatenate 'string
+              (display-images)
               (tag h1 ()
-                    (tag u ()
-                          (princ "Scraping Commits in QC")))
-              (tag h2 () (princ "(On SCIQ but not SCIP)"))
+                    (tag u () "Scraping Commits in QC"))
+              (tag h2 () "(On SCIQ but not SCIP)")
               (tag hr ()))))
 
 (defun display-images ()
@@ -87,10 +85,11 @@
   (check-for-new-archive "/home/ubuntu/")
   (let* ((filenames (get-txt-files "./"))
          (descriptions (mapcar #'description filenames)))
-    (html (tagp body ()
-                (progn
-                  (princ (get-header))
-                  (format t "~{~a~}~a"  descriptions (tag img (src "img/lisplogo_flag2_256.png"))))))))
+    (html (tag body ()
+                (concatenate 'string
+                  (get-header)
+                  (format nil "~{~a~}" descriptions)
+                  (tag img (src "img/lisplogo_flag2_256.png")))))))
 
 ;; ============================================================================
 ;;                           Hunchentoot Handlers
