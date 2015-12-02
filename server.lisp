@@ -86,7 +86,7 @@
 
 (defun handle-tickets ()
   (check-for-new-archive "/home/ubuntu/")
-  (let* ((filenames (get-txt-files "./"))
+  (let* ((filenames (get-txt-files txt-dir))
          (descriptions (mapcar #'task-status filenames)))
     (html (tag body ()
             (get-header)
