@@ -1,10 +1,11 @@
 ; For some reason, none of these things load automatically in the REPL
-(load "configs/test.lisp")
-;(load "configs/bloomberg.lisp")
-(load "shell.lisp")
-(load "html.lisp")
-(ql:quickload "split-sequence")
-(ql:quickload "hunchentoot")
+(defun load-dependencies ()
+    ;(load "configs/test.lisp")
+    (load "configs/bloomberg.lisp")
+    (load "shell.lisp")
+    (load "html.lisp")
+    (ql:quickload "split-sequence")
+    (ql:quickload "hunchentoot"))
 
 ;; ============================================================================
 ;;                               File Handling
