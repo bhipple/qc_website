@@ -1,9 +1,10 @@
+
+(require "configs" "configs/config.lisp")
+(require "shell" "shell.lisp")
+(require "html" "html.lisp")
+
 ; For some reason, none of these things load automatically in the REPL
-(defun load-dependencies ()
-    ;(load "configs/test.lisp")
-    (load "configs/bloomberg.lisp")
-    (load "shell.lisp")
-    (load "html.lisp")
+(eval-when (:compile-toplevel)
     (ql:quickload "split-sequence")
     (ql:quickload "hunchentoot"))
 
@@ -102,5 +103,6 @@
   (setf (hunchentoot:content-type*) "html")
   (handle-tickets))
 
-;(defparameter acceptor (make-instance 'hunchentoot:easy-acceptor :port 4242))
-;(hunchentoot:start acceptor)
+(defun main ()
+  (defparameter acceptor (make-instance 'hunchentoot:easy-acceptor :port 4242))
+  (hunchentoot:start acceptor))

@@ -1,5 +1,7 @@
 ; This provides a DSL for writing XML and HTML tags built on Lisp macros 
 ; Copied from Land of Lisp
+(provide "html")
+
 ;; ============================================================================
 ;;                                  Macros
 ;; ============================================================================

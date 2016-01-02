@@ -1,3 +1,5 @@
+(provide "config")
+
 (defparameter github "https://github.com/brhCS/")
 
 (defparameter txt-dir "./test/")
