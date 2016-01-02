@@ -3,7 +3,6 @@
 (require "shell" "shell.lisp")
 (require "html" "html.lisp")
 
-; For some reason, none of these things load automatically in the REPL
 (eval-when (:compile-toplevel)
     (ql:quickload "split-sequence")
     (ql:quickload "hunchentoot"))
@@ -92,7 +91,6 @@
          (descriptions (mapcar #'task-status filenames)))
     (html (tag body ()
             (get-header)
-
             (format nil "~{~a~}" descriptions)
             (tag img (src "img/lisplogo_flag2_256.png"))))))
 
