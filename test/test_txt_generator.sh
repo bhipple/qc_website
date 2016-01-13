@@ -12,6 +12,6 @@ cd -
 echo "$dotfiles" > dotfiles.txt
 
 # Regenerate the tar for the website to extract
-rm -f ./*.tar.gz ../*.tar.gz
-tar -cf ../archive-test.tar.gz ./*.txt
-rm -f ./*.txt ../*.txt
+rm -f ./*.tar.gz
+tar -cf ../src/archive-test.tar.gz ./*.txt
+rm -f ./*.txt ../src/*.txt
