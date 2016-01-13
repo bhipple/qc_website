@@ -108,5 +108,5 @@
   (handle-tickets))
 
 (defun main ()
-  (defparameter acceptor (make-instance 'hunchentoot:easy-acceptor :port 4242))
+  (defparameter acceptor (make-instance 'hunchentoot:easy-acceptor :port 80))
   (hunchentoot:start acceptor))
