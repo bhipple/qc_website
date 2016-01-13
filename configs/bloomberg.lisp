@@ -1,4 +1,3 @@
-(defparameter github "https://bbgithub.dev.bloomberg.com/scrp/")
-
-(defparameter txt-dir "./")
-(defparameter archive-location "/home/ubuntu/qc_archives/")
+(defparameter *github* "https://bbgithub.dev.bloomberg.com/scrp/")
+(defparameter *commit-location* "./")
+(defparameter *archive-location* "../qc_archives/")

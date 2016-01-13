@@ -4,8 +4,8 @@
 (require "html" "html.lisp")
 
 (eval-when (:compile-toplevel)
-    (ql:quickload "split-sequence")
-    (ql:quickload "hunchentoot"))
+    (ql:quickload :split-sequence)
+    (ql:quickload :hunchentoot))
 
 ;; ============================================================================
 ;;                               File Handling
@@ -30,7 +30,7 @@
     (princ archiveName)
     (sh (concatenate 'string "tar -xf " fullName))
     (print "Moving to archives.")
-    (sh (concatenate 'string "mv " fullName " " archive-location archiveName))))
+    (sh (concatenate 'string "mv " fullName " " *archive-location* archiveName))))
 
 (defun check-for-new-archive (path)
   (let ((archive (directory (concatenate 'string path "archive*.tar.gz"))))
@@ -42,35 +42,30 @@
 ; Each line is a commit in QC for the task
 (defun format-line (line task)
   (let* ((parts (split-sequence:split-sequence #\| line))
+         (github-link (concatenate 'string *github* task))
          (author (car parts))
          (sha (cadr parts))
          (date (caddr parts))
          (msg (cadddr parts))
-         (commit-link (concatenate 'string github task "/commit/" sha)))
+         (commit-link (concatenate 'string *github* task "/commit/" sha)))
     (concatenate 'string
-                 (tag td () date)
+                 (tag td () (tag a (href github-link) task))
                  (tag td () author)
+                 (tag td () date)
                  (tag td () (tag a (href commit-link) msg)))))
 
-; Formats all lines for a task into a table
+; Formats all lines for a task into a table row
 (defun format-lines (lines task)
-  (apply #'concatenate 'string (mapcar (lambda (line) (tag tr ()  (format-line line task))) lines)))
+  (apply #'concatenate 'string
+         (mapcar (lambda (line)
+                   (tag tr ()  (format-line line task))) lines)))
 
 ; Generates the table data for one task
 (defun task-status (fname)
   (let* ((name-content-pair (get-fname-content-pair fname))
          (task (car name-content-pair))
-         (content (cdr name-content-pair))
-         (bbgh-task-link (concatenate 'string github task))
-         (formatted-lines (format-lines content task)))
-    (concatenate 'string
-                 (tag h3 () (tag a (href bbgh-task-link) task ":<br>"))
-                 (tag table (border "1" cellpadding "3" cellspacing "1")
-                   (tag tr ()
-                     (tag th () "Date")
-                     (tag th () "Author")
-                     (tag th () "Commit"))
-                     formatted-lines))))
+         (content (cdr name-content-pair)))
+    (format-lines content task)))
 
 (defun get-header ()
   (tag p ()
@@ -85,13 +80,22 @@
                (tag img (src "img/lisplogo_fancy_256.png"))
                (tag img (src "img/lisplogo_warning_256.png"))))
 
+(defun define-table (descriptions)
+  (tag table (border "1" cellpadding "3" cellspacing "1")
+    (tag tr ()
+      (tag th () "Task")
+      (tag th () "Author")
+      (tag th () "Date")
+      (tag th () "Commit"))
+    (format nil "~{~a~}" descriptions)))
+
 (defun handle-tickets ()
-  (check-for-new-archive "/home/ubuntu/")
-  (let* ((filenames (get-txt-files txt-dir))
+  (check-for-new-archive *commit-location*)
+  (let* ((filenames (get-txt-files *commit-location*))
          (descriptions (mapcar #'task-status filenames)))
     (html (tag body ()
             (get-header)
-            (format nil "~{~a~}" descriptions)
+            (define-table descriptions)
             (tag img (src "img/lisplogo_flag2_256.png"))))))
 
 ;; ============================================================================

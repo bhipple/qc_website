@@ -1,9 +1,17 @@
 #!/bin/sh
-# This small script generates some fake data
+# This small script generates some fake data to test the website.
 
-git log -n 5 --pretty='%an|%H|%ci|%s' > qc_website.txt
+FORMAT="--pretty=%an|%H|%cr|%s"
+
+# Use the last couple commits from my dotfiles repo and this repo
+git log -n 7 "$FORMAT" > qc_website.txt
 
 cd ~/dotfiles
-dotfiles=$(git log -n 5 --pretty='%an|%H|%ci|%s')
+dotfiles=$(git log -n 3 "$FORMAT")
 cd -
 echo "$dotfiles" > dotfiles.txt
+
+# Regenerate the tar for the website to extract
+rm -f ./*.tar.gz ../*.tar.gz
+tar -cf ../archive-test.tar.gz ./*.txt
+rm -f ./*.txt ../*.txt
