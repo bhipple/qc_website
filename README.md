@@ -4,13 +4,9 @@ This server displays ranges of git commmits for projects. Its current use is to 
 ![QC Website](https://raw.githubusercontent.com/brhCS/qc_website/master/img/screenshot.jpg)
 
 ## Input format
-Currently, it looks for all `*.txt` files in its configured directory.  Each file is assumed to be a commit range for a particular repository, with the name of the file corresponding to the name of the repository.
+See `test/test_txt_generator.sh` for the cmdline git log flags to use to generate messages in the correct format.
 
-Each line in the file is a commit to display, in the format:
-```
-AuthorName|SHA|Date|Message
-```
-See `test/test_txt_generator.sh` or the cmdline git log flags to use to generate messages in this format.
+Not included is a system to tie packages on production to a sha, packages on beta to a sha, and generate an output `.tar.gz` of all `.txt` files with the commit data for that sha range.  See the test suite for details on how this might be done.
 
 ## Configuration Parameters
 Setup `config.lisp` with these parameters:
