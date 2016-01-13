@@ -27,6 +27,7 @@
                                            (pairs atts)))
                            nil)
                 (concatenate 'string "" ,@body)
+                (fresh-line)
                 (print-tag ',name nil t)))
 
 (defmacro html (&body body)
@@ -58,3 +59,32 @@
                        (format nil " ~a=\"~a\"" (string-downcase (car att)) (cdr att)))
                      alst))
                ">"))
+
+;; ============================================================================
+;;                            Content Header
+;; ============================================================================
+; This is used for the sorttable
+(defun head-section ()
+  (tag head ()
+    "<META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html; charset=ISO-8859-1\">"
+    (tag script (type "text/javascript" src "sorttable.js"))
+    (tag style (type "text/css")
+      "th, td {
+          padding: 3px !important;
+       }
+
+       /* Sortable tables */
+       table.sortable thead {
+           background-color: #FFF;
+           color: #00000;
+           font-weight: bold;
+           cursor: default;
+       }
+       th {
+         font-size: 120%;
+       }
+
+       table.sortable th:not(.sorttable_sorted):not(.sorttable_sorted_reverse):not(.sorttable_nosort):after {
+           content: \" \\25B4\\25BE\"
+       }"
+      )))

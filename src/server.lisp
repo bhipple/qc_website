@@ -80,8 +80,8 @@
                (tag img (src "img/lisplogo_fancy_256.png"))
                (tag img (src "img/lisplogo_warning_256.png"))))
 
-(defun define-table (descriptions)
-  (tag table (border "3" cellpadding "4" cellspacing "2")
+(defun create-table (descriptions)
+  (tag table (class "sortable" border "3" cellpadding "4" cellspacing "2")
     (tag tr ()
       (tag th () "Task")
       (tag th () "Author")
@@ -93,10 +93,12 @@
   (check-for-new-archive *commit-location*)
   (let* ((filenames (get-txt-files *commit-location*))
          (descriptions (mapcar #'task-status filenames)))
-    (html (tag body ()
-            (get-header)
-            (define-table descriptions)
-            (tag img (src "img/lisplogo_flag2_256.png"))))))
+    (html
+      (head-section)
+      (tag body ()
+        (get-header)
+        (create-table descriptions)
+        (tag img (src "img/lisplogo_flag2_256.png"))))))
 
 ;; ============================================================================
 ;;                           Hunchentoot Handlers
