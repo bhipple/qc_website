@@ -107,6 +107,11 @@
   (setf (hunchentoot:content-type*) "html")
   (handle-tickets))
 
-(defun main ()
-  (defparameter acceptor (make-instance 'hunchentoot:easy-acceptor :port 80))
+(defun start-on-port (port)
+  (defparameter acceptor
+    (make-instance 'hunchentoot:easy-acceptor :port port))
   (hunchentoot:start acceptor))
+
+(defun main ()
+  (start-on-port 4242)
+  (start-on-port 80))

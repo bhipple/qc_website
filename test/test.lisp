@@ -1,7 +1,9 @@
 ; Simple tests with RT
-(require "server" "../server.lisp")
+(require "server" "../src/server.lisp")
 (eval-when (:compile-toplevel)
-    (ql:quickload :rt))
+    (ql:quickload :lisp-unit))
 
-; WIP
-;(rt:deftest 
+(lisp-unit:define-test smoke
+  (lisp-unit:assert-equal "<html>" (subseq (handle-tickets) 0 6)))
+
+(lisp-unit:run-tests)
