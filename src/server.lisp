@@ -1,5 +1,5 @@
 
-(require "configs" "configs/config.lisp")
+(require "configs" "../configs/config.lisp")
 (require "shell" "shell.lisp")
 (require "html" "html.lisp")
 
@@ -81,7 +81,7 @@
                (tag img (src "img/lisplogo_warning_256.png"))))
 
 (defun define-table (descriptions)
-  (tag table (border "1" cellpadding "3" cellspacing "1")
+  (tag table (border "3" cellpadding "4" cellspacing "2")
     (tag tr ()
       (tag th () "Task")
       (tag th () "Author")
