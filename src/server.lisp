@@ -72,8 +72,7 @@
     (display-images)
     (tag h1 ()
       (tag u () "Commits in QC"))
-    (tag h2 () "(On Beta but not Production)")
-    (tag hr ())))
+    (tag h2 () "(On Beta but not Production)")))
 
 (defun display-images ()
   (concatenate 'string
@@ -81,13 +80,14 @@
                (tag img (src "img/lisplogo_warning_256.png"))))
 
 (defun create-table (descriptions)
-  (tag table (class "order-table table" border "3" cellpadding "4" cellspacing "2")
+  (tag div (class "datagrid")
+    (tag table (class "order-table table")
     (tag tr ()
       (tag th () "Task")
       (tag th () "Author")
       (tag th () "Date")
       (tag th () "Commit"))
-    (format nil "~{~a~}" descriptions)))
+    (format nil "~{~a~}" descriptions))))
 
 (defun handle-tickets ()
   (check-for-new-archive *commit-location*)
