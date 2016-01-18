@@ -4,8 +4,8 @@
 (require "html" "html.lisp")
 
 (eval-when (:compile-toplevel)
-    (ql:quickload :split-sequence)
-    (ql:quickload :hunchentoot))
+  (ql:quickload :split-sequence)
+  (ql:quickload :hunchentoot))
 
 ;; ============================================================================
 ;;                               File Handling
@@ -81,7 +81,7 @@
                (tag img (src "img/lisplogo_warning_256.png"))))
 
 (defun create-table (descriptions)
-  (tag table (class "sortable" border "3" cellpadding "4" cellspacing "2")
+  (tag table (class "order-table table" border "3" cellpadding "4" cellspacing "2")
     (tag tr ()
       (tag th () "Task")
       (tag th () "Author")
@@ -97,7 +97,9 @@
       (head-section)
       (tag body ()
         (get-header)
-        (create-table descriptions)
+        (tag section (class "container")
+          "<input type=\"search\" class=\"light-table-filter\" data-table=\"order-table\" placeholder=\"Filter\">"
+          (create-table descriptions))
         (tag img (src "img/lisplogo_flag2_256.png"))))))
 
 ;; ============================================================================

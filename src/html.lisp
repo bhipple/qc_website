@@ -67,24 +67,4 @@
 (defun head-section ()
   (tag head ()
     "<META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html; charset=ISO-8859-1\">"
-    (tag script (type "text/javascript" src "sorttable.js"))
-    (tag style (type "text/css")
-      "th, td {
-          padding: 3px !important;
-       }
-
-       /* Sortable tables */
-       table.sortable thead {
-           background-color: #FFF;
-           color: #00000;
-           font-weight: bold;
-           cursor: default;
-       }
-       th {
-         font-size: 120%;
-       }
-
-       table.sortable th:not(.sorttable_sorted):not(.sorttable_sorted_reverse):not(.sorttable_nosort):after {
-           content: \" \\25B4\\25BE\"
-       }"
-      )))
+    (tag script (type "text/javascript" src "lightfilter.js"))))
