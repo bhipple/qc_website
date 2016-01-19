@@ -69,14 +69,15 @@
 
 (defun get-header ()
   (tag p ()
-    (display-images)
     (tag h1 ()
       (tag u () "Commits in QC"))
     (tag h2 () "(On Beta but not Production)")))
 
 (defun display-images ()
   (concatenate 'string
+               "<br>"
                (tag img (src "img/lisplogo_fancy_256.png"))
+               (tag img (src "img/lisplogo_flag2_256.png"))
                (tag img (src "img/lisplogo_warning_256.png"))))
 
 (defun create-table (descriptions)
@@ -100,7 +101,7 @@
         (tag section (class "container")
           "<input type=\"search\" class=\"light-table-filter\" data-table=\"order-table\" placeholder=\"Filter\">"
           (create-table descriptions))
-        (tag img (src "img/lisplogo_flag2_256.png"))))))
+        (display-images)))))
 
 ;; ============================================================================
 ;;                           Hunchentoot Handlers
