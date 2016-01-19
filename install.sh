@@ -9,5 +9,5 @@ sudo setcap 'cap_net_bind_service=+ep' /usr/bin/sbcl
 
 if ! [ -f configs/config.lisp ]; then
     echo "No config found. Linking test config."
-    ln -s "$(pwd)"/configs/test.lisp configs/config.lisp
+    ln -fs "$(pwd)"/configs/test.lisp configs/config.lisp
 fi

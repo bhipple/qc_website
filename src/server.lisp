@@ -92,7 +92,7 @@
 
 (defun handle-tickets ()
   (check-for-new-archive *commit-location*)
-  (let* ((filenames (get-txt-files *commit-location*))
+  (let* ((filenames (get-txt-files "./"))
          (descriptions (mapcar #'task-status filenames)))
     (html
       (head-section)
