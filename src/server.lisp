@@ -46,12 +46,14 @@
          (author (car parts))
          (sha (cadr parts))
          (date (caddr parts))
-         (msg (cadddr parts))
+         (age (cadddr parts))
+         (msg (car (cddddr parts)))
          (commit-link (concatenate 'string *github* task "/commit/" sha)))
     (concatenate 'string
                  (tag td () (tag a (href github-link) task))
                  (tag td () author)
                  (tag td () date)
+                 (tag td () age)
                  (tag td () (tag a (href commit-link) msg)))))
 
 ; Formats all lines for a task into a table row
@@ -87,6 +89,7 @@
       (tag th () "Task")
       (tag th () "Author")
       (tag th () "Date")
+      (tag th () "Age")
       (tag th () "Commit"))
     (format nil "~{~a~}" descriptions))))
 
