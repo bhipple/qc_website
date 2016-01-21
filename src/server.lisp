@@ -1,11 +1,9 @@
-
-(require "configs" "../configs/config.lisp")
-(require "shell" "shell.lisp")
-(require "html" "html.lisp")
-
-(eval-when (:compile-toplevel)
+(eval-when (:compile-toplevel :load-toplevel :execute)
   (ql:quickload :split-sequence)
-  (ql:quickload :hunchentoot))
+  (ql:quickload :hunchentoot)
+  (load "../configs/config.lisp")
+  (load "shell.lisp")
+  (load "html.lisp"))
 
 ;; ============================================================================
 ;;                               File Handling
@@ -114,10 +112,10 @@
   (handle-tickets))
 
 (defun start-on-port (port)
-  (defparameter acceptor
-    (make-instance 'hunchentoot:easy-acceptor :port port))
-  (hunchentoot:start acceptor))
+  (hunchentoot:start (make-instance 'hunchentoot:easy-acceptor
+                                    :port port
+                                    :address "localhost")))
 
-(defun main ()
+(defun main (&rest args)
   (start-on-port 4242)
   (start-on-port 80))
