@@ -116,6 +116,15 @@
                                     :port port
                                     :address "localhost")))
 
-(defun main (&rest args)
+(defun start ()
   (start-on-port 4242)
   (start-on-port 80))
+
+(defun main (&rest args)
+  (declare (ignore args))
+  (start)
+  (setf swank::*loopback-interface* "0.0.0.0")
+  (swank-loader:init)
+  (swank:create-server :port 4005
+                       :style swank:*communication-style*
+                       :dont-close t))
