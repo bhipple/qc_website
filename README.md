@@ -20,7 +20,15 @@ Setup `config.lisp` with these parameters:
 ## Building and Running
 If not already done once, run `install.sh`.
 
-Then simply start a REPL with `server.lisp`, load everything twice to make sure all functions are defined with the macros properly, and then call `(main)`.
+Then cd into `src`, start a REPL with `server.lisp` and call `(start)`
+
+## TODO
+* Package with `quickproject`
+* Build with `buildapp`
+* Makefile and test automation
+* Isolate in container with Docker
+* Chef recipe
+* TravisCI
 
 ## Logos
 Credit for the logos goes to Conrad Barski at [lisperati.com](http://lisperati.com)
