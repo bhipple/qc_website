@@ -24,10 +24,7 @@
 (defun extract-archive (path archiveName)
   (let ((fullName (concatenate 'string path archiveName)))
     (sh "rm -f *.txt")
-    (princ "Extracting: ")
-    (princ archiveName)
     (sh (concatenate 'string "tar -xf " fullName))
-    (print "Moving to archives.")
     (sh (concatenate 'string "mv " fullName " " *archive-location* archiveName))))
 
 (defun check-for-new-archive (path)
