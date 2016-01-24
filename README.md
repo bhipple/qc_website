@@ -20,7 +20,11 @@ Setup `config.lisp` with these parameters:
 ## Building and Running
 If not already done once, run `install.sh`.
 
-Then cd into `src`, start a REPL with `server.lisp` and call `(start)`
+Then start a REPL and execute:
+```
+(ql:quickload 'qc_website)
+(qc_website::start)
+```
 
 ## TODO
 * Package with `quickproject`

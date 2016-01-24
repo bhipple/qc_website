@@ -1,9 +1,5 @@
-(eval-when (:compile-toplevel :load-toplevel :execute)
-  (ql:quickload :split-sequence)
-  (ql:quickload :hunchentoot)
-  (load "../configs/config.lisp")
-  (load "shell.lisp")
-  (load "html.lisp"))
+;;;; server.lisp
+(in-package #:qc_website)
 
 ;; ============================================================================
 ;;                               File Handling
@@ -23,8 +19,8 @@
 
 (defun extract-archive (path archiveName)
   (let ((fullName (concatenate 'string path archiveName)))
-    (sh "rm -f *.txt")
-    (sh (concatenate 'string "tar -xf " fullName))
+    (sh (concatenate 'string "rm -f " *commit-location* "*.txt"))
+    (sh (concatenate 'string "tar -C " *commit-location* " -xvf " fullName))
     (sh (concatenate 'string "mv " fullName " " *archive-location* archiveName))))
 
 (defun check-for-new-archive (path)
@@ -89,8 +85,8 @@
     (format nil "~{~a~}" descriptions))))
 
 (defun handle-tickets ()
-  (check-for-new-archive *commit-location*)
-  (let* ((filenames (get-txt-files "./"))
+  (check-for-new-archive "./")
+  (let* ((filenames (get-txt-files *commit-location*))
          (descriptions (mapcar #'task-status filenames)))
     (html
       (head-section)
@@ -112,10 +108,6 @@
   (hunchentoot:start (make-instance 'hunchentoot:easy-acceptor
                                     :port port
                                     :address "localhost")))
-
-(defun start ()
-  (start-on-port 4242)
-  (start-on-port 80))
 
 (defun main (&rest args)
   (declare (ignore args))

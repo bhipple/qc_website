@@ -1,6 +1,9 @@
 #!/bin/sh
 # This small script generates some fake data to test the website.
 
+# Cleanup
+rm -rf ../*.tar.gz ../*.txt
+
 FORMAT="--pretty=%an|%H|%ci|%cr|%s"
 
 # Use the last couple commits from my dotfiles repo and this repo
@@ -12,6 +15,5 @@ cd -
 echo "$dotfiles" > dotfiles.txt
 
 # Regenerate the tar for the website to extract
-rm -f ./*.tar.gz
-tar -cf ../src/archive-test.tar.gz ./*.txt
-rm -f ./*.txt ../src/*.txt
+tar -cf ../archive-test.tar.gz ./*.txt
+rm -f ./*.txt
